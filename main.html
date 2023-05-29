@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  
+    <title>Student Registration Form</title>
+</head>
+<script>var form = document.querySelector("#userForm");
+    const allUsersData = [];
+    
+    // ------------------function to reset the form------------------
+    const resetForm = function () {
+      form.classList.remove('was-validated')
+      const name = document.getElementById('name');
+      name.value = "";
+    
+      const email = document.getElementById('email');
+      email.value = "";
+      const website = document.getElementById('website');
+      website.value = "";
+      const image = document.getElementById('image');
+      image.value = "";
+    
+      const genderEl = document.querySelectorAll('input[name="gender"]');
+      for (const rb of genderEl) {
+        rb.checked = false;
+      }
+      
+      const skillEl = document.querySelectorAll('input[name="skill"]');
+      for (const rb of skillEl) {
+        rb.checked = false;
+      }
+    };
+    
+    // --------------------function to get the data of the form----------------------
+    
+    const getData = function () {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const website = document.getElementById('website').value;
+      const image = document.getElementById('image').value;
+      let gender;
+      let skills = [];
+    
+      const genderEl = document.querySelectorAll('input[name="gender"]');
+      for (const rb of genderEl) {
+        if (rb.checked) {
+          gender = rb.value;
+          break;
+        }
+      };
+    
+      const skillEl = document.querySelectorAll('input[name="skill"]');
+      for (const rb of skillEl) {
+        if (rb.checked) {
+          skills.push(rb.value);
+        }
+      }
+      return { name, email, website, image, gender, skills };
+    };
+    
+    //-----------------------adding event listner to the "enroll student" button with type submit to submit the form
+    
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (form.checkValidity()) {
+        const data = getData();
+        allUsersData.push(data);
+        printResult(data);
+        resetForm();
+    
+    
+      } else {
+        form.classList.add('was-validated');
+      };
+      removeSpan();
+    });
+    
+    // --------------function to remove the span tag ("fill the form to enroll the students")
+    
+    function removeSpan() {
+      var span = document.getElementById("span");
+      if(span){
+        span.remove();
+      }
+      localStorage.setItem("New Todo", JSON.stringify(listArray));
+      showTasks(); 
+    }
+    
+    
+    
+    // ------------------function to print the form data in the right side of div by genrating html elments inside the div.
+    
+    function printResult(data) {
+      const resultEl = document.getElementById('enrolled-students');
+      let sectionHeading = null;
+      if (allUsersData.length == 1) {
+    
+        sectionHeading = document.createElement('div');
+        const description = document.createElement('p');
+        description.innerHTML = "Description";
+        description.className = "description";
+    
+        const image = document.createElement('p');
+        image.innerHTML = "Image"
+        image.className = "Image";
+    
+        sectionHeading.className = "sectionHeading";
+        sectionHeading.append(description, image);
+      };
+    
+      const wrapper = document.createElement('div');
+      wrapper.className = "wrapper";
+      wrapper.addEventListener('click', function (e) {
+        console.log(e.target.className);
+        if (e.target.className.includes('userDeleteBtn')) {
+          console.log('aaadfasdfasdf');
+          e.currentTarget.remove();
+        }
+    
+      });
+    
+      const deleteBtn = document.createElement('button');
+      deleteBtn.innerHTML = "+";
+      deleteBtn.className = "userDeleteBtn";
+    
+      const textInfoContainer = document.createElement('div');
+      textInfoContainer.className = "textInfoContainer";
+    
+      const imageContainer = document.createElement('div');
+      imageContainer.className = "imageContainer";
+    
+      const imageHyperlink = document.createElement('a');
+      imageHyperlink.href = data.image;
+      imageHyperlink.target = "_blank";
+    
+    
+      let name = document.createElement('p');
+      name.className = "infoText userName";
+      name.innerHTML = data.name;
+    
+      let gender = document.createElement('p');
+      gender.className = "infoText gender";
+      gender.innerHTML = data.gender;
+    
+      let email = document.createElement('p');
+      email.className = "infoText email";
+      email.innerHTML = data.email;
+    
+      let website = document.createElement('a');
+      website.className = "infoText website";
+      website.innerHTML = data.website;
+      website.href = data.website;
+      website.target = "_blank";
+    
+      let skills = document.createElement('p');
+      skills.className = "infoText skills";
+      skills.innerHTML = data.skills.join(', ');
+    
+    
+      let userImage = document.createElement('img');
+      userImage.className = "userImage";
+      userImage.src = data.image;
+    
+    
+      textInfoContainer.append(name, gender, email, website, skills);
+      imageHyperlink.appendChild(userImage);
+      imageContainer.appendChild(imageHyperlink);
+    
+      wrapper.append(textInfoContainer, imageContainer, deleteBtn);
+    
+      if (sectionHeading == null) {
+        resultEl.append(wrapper);
+      } else {
+        resultEl.append(sectionHeading, wrapper)
+      };
+    
+    };</script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Charis+SIL:ital@1&family=Joan&display=swap');
+* {
+    margin: 0px;
+    padding: 0;
+    font-family:'Baloo Bhai',cursive;;
+  }
+
+
+  :root {
+    /* color for main nav */
+    --bg-light-black:rgb(40, 37, 37);
+
+    /* color for (description and image (tittled)) nav. */
+    --bg-green-yellow:#a7a7a6;
+
+    /* color for border */
+    --b-dark-black:rgb(0, 0, 0);
+
+    /* color for new wrapper div */
+    --b-light-yellow:#bfbfbf;
+
+  }
+  
+  .navigation-bar {
+    width: 100%;
+    height: 90px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    color:white;
+    padding:10px;
+    background-color:black;
+    
+  }
+
+  .students {
+    display: flex;
+    height: auto;
+    width: 109%;
+    background-color:#af7575;
+    color:black;
+    font-weight: bold; 
+  }
+
+.enroll-student {
+  margin-top: 30px;
+  padding-right: 100px;
+  box-sizing: border-box;
+  width: 45%;
+  height: auto;
+  color:black;
+  font-size:18px;
+  font-weight: 900;
+
+}
+
+#enrolled-students {
+  margin-top: 22px;
+  margin-bottom: 15px;
+  justify-content: center;
+  width: 50%;
+  height: calc(100vh - 70px);
+  overflow: visible;
+  text-align: left;
+  color: black;
+  margin-left: 32px;
+  text-align: center;
+  padding: 7px;
+  margin-right: 20px;
+}
+
+.enroll-heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.gender {
+  padding-left: 15px;
+}
+
+.label {
+  display: flex;
+  font-size: 30px;
+}
+
+.form-control {
+  margin-bottom: 16px;
+}
+
+.seperation-border {
+  box-sizing: border-box;
+  box-shadow: 0px 0px 3px 0px var(--bg-light-black);
+  width: 1.3px;
+  height: 92vh;
+  background: var(--bg-light-black);
+}
+
+@media screen and (max-width: 768px) 
+{
+  hr.seperation-border{
+    height: 0;
+  }
+}
+
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  background-color: #f4f564;
+  color: rgb(6, 6, 6);
+  box-sizing: border-box;
+  border: solid 2px var(--b-dark-black);
+  font-weight: bold;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+
+.sectionHeading > p {
+  padding: 10px 12px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  font-weight: bold;
+}
+
+.description {
+  box-sizing: border-box;
+  border-right: solid 2px var(--b-dark-black);
+  margin-bottom: 0;
+  width: 70%;
+
+}
+
+.Image {
+  margin-bottom: 0;
+  width: 30%;
+}
+
+.infoText {
+  margin: 0;
+  padding: 0;
+}
+
+.userName {
+  font-weight: bold;
+}
+
+.wrapper {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 154px;
+  justify-content: space-between;
+  border: solid 3px black;
+  border-top: none;
+  animation: fadeIn 2s;
+  position: relative;
+  font-weight: 700;
+  border-bottom-right-radius: 18px;
+  border-bottom-left-radius: 18px;
+}
+
+.userDeleteBtn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  border: none;
+  background-color: transparent;
+  font-size: 25px;
+  transform: rotate(45deg);
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  button.userDeleteBtn {
+    display:block;
+  }
+
+}
+
+.wrapper:hover .userDeleteBtn {
+  display: block;
+}
+
+.wrapper:nth-child(odd) {
+  background-color: rgb(255, 255, 255);
+}
+.wrapper:nth-child(even) {
+  background-color: var(--b-light-yellow);
+}
+
+.textInfoContainer {
+  width: 70%;
+  height: 100%;
+  box-sizing: border-box;
+  border-right: solid 2px var(--b-dark-black);
+  padding: 10px;
+}
+
+.imageContainer {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.userImage {
+  height: 119px;
+  width: 140px;
+}
+
+.fadeIn {
+  animation: fadeIn 2s;
+}
+.box{
+    border: 2px solid black;
+    border-radius: 10px;
+    margin: 34px;
+    width: 35%;
+}
+
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.students {
+  display: flex;
+  height: auto;
+  width: 109%;
+  background-color: #af7575;
+  color: black;
+  font-weight: bold;
+}
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+  .form-check {
+    position: relative;
+    display: block;
+    padding-left: 1.25rem;
+    margin: 20px;
+}
+
+.col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.col-md-4 {
+  -ms-flex: 0 0 33.333333%;
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+}
+
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 15px;
+  border: 0;
+}
+.pt-0, .py-0 {
+  padding-top: 0!important;
+}
+.float-sm-left {
+  float: left!important;
+}
+.col-form-label {
+  padding-top: calc(.375rem + 1px);
+  padding-bottom: calc(.375rem + 1px);
+  margin-bottom: 0;
+  font-size: inherit;
+  line-height: 1.5;
+}
+.col-sm-2 {
+  -ms-flex: 0 0 16.666667%;
+  flex: 0 0 16.666667%;
+  max-width: 16.666667%;
+}
+.col-sm-10 {
+  -ms-flex: 0 0 83.333333%;
+  flex: 0 0 83.333333%;
+  max-width: 83.333333%;
+}
+.form-check-inline {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-left: 0;
+  margin-right: .75rem;
+}
+.btn:not(:disabled):not(.disabled) {
+  cursor: pointer;
+}
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+  cursor: pointer;
+}
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+[type=button], [type=reset], [type=submit], button {
+  -webkit-appearance: button;
+}
+button, select {
+  text-transform: none;
+}
+
+button, input {
+  overflow: visible;
+}
+button, input, optgroup, select, textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+    cursor: pointer;
+}
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+    cursor: pointer;
+}
+.btn-danger {
+    color: #fff;
+    background-color: #000000;
+    border-color: #00c056;
+}
+.enroll-heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.btn-primary {
+  color: #fff;
+  background-color: black;
+  border-color: #00c056;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: 1.375rem 0.75rem;
+  font-weight: 200;
+  line-height: 8.5;
+  color: black;
+  background-color: #f1c0c0;
+  background-clip: padding-box;
+  border: 3px solid black;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.navigation-bar h2{
+font-size: 3rem;
+}
+    </style>
+<body>
+    <div class="navigation-bar">
+        <h2>Student Registration Form</h2>
+    </div>
+
+    <div class="students row">
+
+        <div class="box">
+
+            <form action="" id="userForm" class="main-form form-check needs-validation" novalidate>
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Name:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" minlength="7" id="name" required />
+
+
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="email" class="col-sm-2 col-form-label">Email:</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="email" required />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="website" class="col-sm-2 col-form-label">Website:</label>
+                    <div class="col-sm-10">
+                        <input type="url" class="form-control" id="website" required />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="url" class="col-sm-2 col-form-label">Image Link:</label>
+                    <div class="col-sm-10">
+
+                        <input class="form-control" id="image" required />
+                    </div>
+                </div>
+
+                <fieldset class="form-group row">
+                    <legend class="col-form-label col-sm-2 float-sm-left pt-0">
+                        Gender:
+                    </legend>
+                    <div class="col-sm-10">
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="gender" id="male" value="Male"
+                                required />
+                            <label class="form-check-label" for="male">
+                                Male
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="female" value="Female" />
+                            <label class="form-check-label" for="female">
+                                Female
+                            </label>
+                            
+                        </div>
+
+                    </div>
+                </fieldset>
+                <fieldset class="form-group row">
+                    <legend class="col-form-label col-sm-2 float-sm-left pt-0">
+                        Skills:
+                    </legend>
+                    <div class="col-sm-10">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="skill" id="html" value="Html" />
+                            <label class="form-check-label" for="java">
+                                HTML
+                            </label>
+                            
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="skill" id="css" value="CSS" />
+                            <label class="form-check-label" for="html">
+                                CSS
+                            </label>
+                           
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="skill" id="java" value="Java" />
+                            <label class="form-check-label" for="js">
+                                JS
+                            </label>
+                            
+                        </div>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="btn btn-primary">Submit</button> &nbsp; &nbsp; &nbsp;
+                <button type="reset" class="btn btn-danger">Reset</button>
+            </form>
+        </div>
+        
+        <div id="enrolled-students" class="box">
+            <div class="enroll-heading">
+                <h1>Registered Students</h1>
+            </div>
+            <span id="span">Filled Forms</span>
+
+        </div>
+
+
+    </div>
+</body>
+
+    
+</html>
